@@ -220,7 +220,7 @@
 
 <script>
 
-    // Hàm lưu dữ liệu vào LocalStorage khi nhập
+  // Hàm lưu dữ liệu vào LocalStorage khi nhập
   function saveInputData() {
     const khoiLuongUSDT = document.getElementById('khoiLuongUSDT').value;
     const giaMuaVao = document.getElementById('giaMuaVao').value;
@@ -254,13 +254,42 @@
     alert('Dữ liệu đã được xóa!');
   }
 
+  // Hàm cập nhật giá BTC/USDT mỗi 15 giây bằng AJAX
+  function capNhatGiaBTC() {
+    fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT')
+      .then(response => response.json())
+      .then(data => {
+        var giaHienTai = parseFloat(data.price);
+
+        // Cập nhật giá hiển thị trên giao diện
+        document.getElementById('giaHienTai').innerHTML = 'Giá hiện tại 1 BTC = ' + giaHienTai.toFixed(2) + ' USDT';
+
+        // Nếu có dữ liệu đầu vào, tính toán lại lãi/lỗ
+        const savedData = localStorage.getItem('btcCalculatorData');
+        if (savedData) {
+          const { khoiLuongUSDT, giaMuaVao } = JSON.parse(savedData);
+          if (khoiLuongUSDT && giaMuaVao) {
+            tinhLaiLoHienThi(parseFloat(giaMuaVao), giaHienTai, parseFloat(khoiLuongUSDT), 0.001);
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Lỗi khi lấy dữ liệu BTC/USDT:', error);
+      });
+  }
+
   // Gán sự kiện lưu dữ liệu khi nhập
   document.getElementById('khoiLuongUSDT').addEventListener('input', saveInputData);
   document.getElementById('giaMuaVao').addEventListener('input', saveInputData);
 
   // Khi trang tải, tự động khôi phục dữ liệu và tính toán lại
-  window.onload = loadSavedData;
+  window.onload = function () {
+    loadSavedData();
+    capNhatGiaBTC(); // Gọi ngay khi tải trang để có dữ liệu mới nhất
+  };
 
+  // Cập nhật giá BTC/USDT mỗi 15 giây mà không cần reload trang
+  setInterval(capNhatGiaBTC, 15000);
 
   // Hàm tính lãi hoặc lỗ với khối lượng USDT và giá mua vào
   function tinhLaiLo() {
@@ -328,11 +357,7 @@
     document.getElementById('phiBan').innerHTML = 'Phí bán: ' + phiBan.toFixed(2) + ' USDT';
     document.getElementById('tyGia').innerHTML = 'Tỷ giá 1 USDT = ' + tiGiaUSDTtoVND.toLocaleString('vi-VN') + ' VND';
   }
-    // Tự động reload trang sau mỗi 15 giây
-      setInterval(() => {
-        location.reload();
-      }, 15000); // 15000ms = 15 giây
-
+    
 </script>
 
 </body>
