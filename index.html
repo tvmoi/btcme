@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
@@ -49,6 +49,13 @@
       <div>
         <button type="button" class="formbold-btn" onclick="tinhLaiLo()">Úm ba la... :))</button>
       </div>
+
+      <div>
+        <button type="button" class="formbold-btn" onclick="resetData()" style="background-color: #465C00; margin-top: 10px;">
+          Reset dữ liệu
+        </button>
+      </div>
+
 
       <!-- Kết quả tính toán lãi/lỗ -->
       <div id="ketQua" class="ketQua" style="display: none; margin-top: 20px;"></div>
@@ -212,6 +219,49 @@
 </style>
 
 <script>
+
+    // Hàm lưu dữ liệu vào LocalStorage khi nhập
+  function saveInputData() {
+    const khoiLuongUSDT = document.getElementById('khoiLuongUSDT').value;
+    const giaMuaVao = document.getElementById('giaMuaVao').value;
+    
+    const inputData = { khoiLuongUSDT, giaMuaVao };
+    localStorage.setItem('btcCalculatorData', JSON.stringify(inputData));
+  }
+
+  // Hàm tải dữ liệu đã lưu khi trang load và tính toán lại kết quả
+  function loadSavedData() {
+    const savedData = localStorage.getItem('btcCalculatorData');
+    if (savedData) {
+      const { khoiLuongUSDT, giaMuaVao } = JSON.parse(savedData);
+      document.getElementById('khoiLuongUSDT').value = khoiLuongUSDT;
+      document.getElementById('giaMuaVao').value = giaMuaVao;
+
+      // Nếu có dữ liệu hợp lệ, tự động tính toán lại khi trang tải
+      if (khoiLuongUSDT && giaMuaVao) {
+        tinhLaiLo();
+      }
+    }
+  }
+
+  // Hàm reset dữ liệu
+  function resetData() {
+    localStorage.removeItem('btcCalculatorData');
+    document.getElementById('khoiLuongUSDT').value = '';
+    document.getElementById('giaMuaVao').value = '';
+    document.getElementById('ketQua').style.display = 'none';
+    document.getElementById('thongTinGia').style.display = 'none';
+    alert('Dữ liệu đã được xóa!');
+  }
+
+  // Gán sự kiện lưu dữ liệu khi nhập
+  document.getElementById('khoiLuongUSDT').addEventListener('input', saveInputData);
+  document.getElementById('giaMuaVao').addEventListener('input', saveInputData);
+
+  // Khi trang tải, tự động khôi phục dữ liệu và tính toán lại
+  window.onload = loadSavedData;
+
+
   // Hàm tính lãi hoặc lỗ với khối lượng USDT và giá mua vào
   function tinhLaiLo() {
     var khoiLuongUSDT = parseFloat(document.getElementById('khoiLuongUSDT').value);
