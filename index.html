@@ -328,6 +328,11 @@
     document.getElementById('phiBan').innerHTML = 'Phí bán: ' + phiBan.toFixed(2) + ' USDT';
     document.getElementById('tyGia').innerHTML = 'Tỷ giá 1 USDT = ' + tiGiaUSDTtoVND.toLocaleString('vi-VN') + ' VND';
   }
+    // Tự động reload trang sau mỗi 15 giây
+      setInterval(() => {
+        location.reload();
+      }, 15000); // 15000ms = 15 giây
+
 </script>
 
 </body>
