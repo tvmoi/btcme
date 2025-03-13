@@ -1,6 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tính toán lãi/lỗ BTC/USDT trên Binance.com, xem giá Bitcoin, phí giao dịch và tỷ giá hiện tại của USDT với VND.">
+  <meta name="keywords" content="Tính lãi lỗ BTC/USDT, Binance, giá Bitcoin, phí giao dịch, tỷ giá USDT VND">
+  <meta name="author" content=":D">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Tính lỗ/lãi BTC/USDT trên Binance.com">
+  <meta property="og:description" content="Tính toán lãi/lỗ khi giao dịch BTC/USDT trên Binance và theo dõi giá Bitcoin, phí giao dịch và tỷ giá USDT với VND.">
+  <meta property="og:image" content="URL_ĐẾN_HÌNH_ẢNH">
+  <meta property="og:url" content="URL_CỦA_TRANG">
+
+  <title>Tính lỗ/lãi BTC/USDT trên Binance.com</title>
+
+  <!-- Các liên kết và style khác ở đây -->
+</head>
+<body>
 <div class="formbold-main-wrapper">
   <div class="formbold-form-wrapper">
     <form action="https://formbold.com/s/FORM_ID" method="POST">
+      <!-- Dòng tiêu đề lớn được thêm vào trong form -->
+      <h1 class="formbold-form-title">Tính lỗ/lãi BTC/USDT trên Binance.com</h1>
+
       <div class="formbold-mb-5">
         <label for="khoiLuongUSDT" class="formbold-form-label">Khối lượng USDT</label>
         <input
@@ -21,10 +45,37 @@
           class="formbold-form-input"
         />
       </div>
+
       <div>
-        <button type="button" class="formbold-btn" onclick="tinhLaiLo()">Tính Lãi/Lỗ</button>
+        <button type="button" class="formbold-btn" onclick="tinhLaiLo()">Úm ba la... :))</button>
       </div>
-      <div id="ketQua" style="margin-top: 20px; color: #07074d; font-size: 16px;"></div>
+
+      <div>
+        <button type="button" class="formbold-btn" onclick="resetData()" style="background-color: #465C00; margin-top: 10px;">
+          Reset dữ liệu
+        </button>
+      </div>
+
+
+      <!-- Kết quả tính toán lãi/lỗ -->
+      <div id="ketQua" class="ketQua" style="display: none; margin-top: 20px;"></div>
+          
+      <!-- Các kết quả chính sẽ bị ẩn khi chưa có kết quả -->
+      <div id="thongTinGia" class="thongTinGia" style="display: none;">
+        <br>
+        <p id="giaHienTai">Giá hiện tại BTC/USDT: </p>
+        <p id="phiMua">Phí mua: </p>
+        <p id="phiBan">Phí bán: </p>
+        <p id="tyGia">Tỷ giá 1 USDT = </p>
+        <p id="loiTyGia" class="error-message" style="display: none;"></p>
+      </div>
+
+      <!-- Dữ liệu tham khảo ngoài khung -->
+      <div class="infoRefer">
+        <p>* BTC/USDT theo thời gian thực được lấy từ sàn Binance.</p>
+        <p>* Phí mua/bán được tính theo tỷ lệ mặc định 0.1% cho mỗi giao dịch.</p>
+        <p>* Tỷ giá USDT/VND tham khảo từ CoinGecko.</p>
+      </div>
     </form>
   </div>
 </div>
@@ -37,6 +88,8 @@
   }
   body {
     font-family: "Inter", Arial, Helvetica, sans-serif;
+    background-color: #333;
+    color: white;
   }
   .formbold-mb-5 {
     margin-bottom: 20px;
@@ -52,24 +105,36 @@
     margin: 0 auto;
     max-width: 550px;
     width: 100%;
-    background: white;
+    background: #222;
+    border-radius: 10px;
+    padding: 30px;
   }
+
+  .formbold-form-title {
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #fff;
+  }
+
   .formbold-form-label {
     display: block;
     font-weight: 500;
     font-size: 16px;
-    color: #07074d;
+    color: #bbb;
     margin-bottom: 12px;
   }
+
   .formbold-form-input {
     width: 100%;
     padding: 12px 24px;
     border-radius: 6px;
-    border: 1px solid #e0e0e0;
-    background: white;
+    border: 1px solid #444;
+    background: #333;
     font-weight: 500;
     font-size: 16px;
-    color: #6b7280;
+    color: #ddd;
     outline: none;
     resize: none;
   }
@@ -85,7 +150,7 @@
     padding: 14px 32px;
     border: none;
     font-weight: 600;
-    background-color: #6a64f1;
+    background-color: #007bff;
     color: white;
     width: 100%;
     cursor: pointer;
@@ -93,6 +158,37 @@
   .formbold-btn:hover {
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
   }
+
+  .ketQua {
+    background: #444;
+    padding: 20px;
+    border-radius: 10px;
+    color: #ddd;
+  }
+
+  .result {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .percent, .vnd {
+    margin-top: 10px;
+  }
+
+  .thongTinGia {
+    font-size: 14px;
+    color: #bbb;
+    margin-top: 10px;
+  }
+
+  .result-lai {
+    color: #28a745;
+  }
+
+  .result-lo {
+    color: #dc3545;
+  }
+
   .formbold--mx-3 {
     margin-left: -12px;
     margin-right: -12px;
@@ -115,9 +211,87 @@
       width: 50%;
     }
   }
+
+  .infoRefer {
+    font-size: 12px;
+    color: #bbb;
+    margin-top: 20px;
+  }
 </style>
 
 <script>
+
+  // Hàm lưu dữ liệu vào LocalStorage khi nhập
+  function saveInputData() {
+    const khoiLuongUSDT = document.getElementById('khoiLuongUSDT').value;
+    const giaMuaVao = document.getElementById('giaMuaVao').value;
+    
+    const inputData = { khoiLuongUSDT, giaMuaVao };
+    localStorage.setItem('btcCalculatorData', JSON.stringify(inputData));
+  }
+
+  // Hàm tải dữ liệu đã lưu khi trang load và tính toán lại kết quả
+  function loadSavedData() {
+    const savedData = localStorage.getItem('btcCalculatorData');
+    if (savedData) {
+      const { khoiLuongUSDT, giaMuaVao } = JSON.parse(savedData);
+      document.getElementById('khoiLuongUSDT').value = khoiLuongUSDT;
+      document.getElementById('giaMuaVao').value = giaMuaVao;
+
+      // Nếu có dữ liệu hợp lệ, tự động tính toán lại khi trang tải
+      if (khoiLuongUSDT && giaMuaVao) {
+        tinhLaiLo();
+      }
+    }
+  }
+
+  // Hàm reset dữ liệu
+  function resetData() {
+    localStorage.removeItem('btcCalculatorData');
+    document.getElementById('khoiLuongUSDT').value = '';
+    document.getElementById('giaMuaVao').value = '';
+    document.getElementById('ketQua').style.display = 'none';
+    document.getElementById('thongTinGia').style.display = 'none';
+    alert('Dữ liệu đã được xóa!');
+  }
+
+  // Hàm cập nhật giá BTC/USDT mỗi 15 giây bằng AJAX
+  function capNhatGiaBTC() {
+    fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT')
+      .then(response => response.json())
+      .then(data => {
+        var giaHienTai = parseFloat(data.price);
+
+        // Cập nhật giá hiển thị trên giao diện
+        document.getElementById('giaHienTai').innerHTML = 'Giá hiện tại 1 BTC = ' + giaHienTai.toFixed(2) + ' USDT';
+
+        // Nếu có dữ liệu đầu vào, tính toán lại lãi/lỗ
+        const savedData = localStorage.getItem('btcCalculatorData');
+        if (savedData) {
+          const { khoiLuongUSDT, giaMuaVao } = JSON.parse(savedData);
+          if (khoiLuongUSDT && giaMuaVao) {
+            tinhLaiLoHienThi(parseFloat(giaMuaVao), giaHienTai, parseFloat(khoiLuongUSDT), 0.001);
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Lỗi khi lấy dữ liệu BTC/USDT:', error);
+      });
+  }
+
+  // Gán sự kiện lưu dữ liệu khi nhập
+  document.getElementById('khoiLuongUSDT').addEventListener('input', saveInputData);
+  document.getElementById('giaMuaVao').addEventListener('input', saveInputData);
+
+  // Khi trang tải, tự động khôi phục dữ liệu và tính toán lại
+  window.onload = function () {
+    loadSavedData();
+    capNhatGiaBTC(); // Gọi ngay khi tải trang để có dữ liệu mới nhất
+  };
+
+  // Cập nhật giá BTC/USDT mỗi 15 giây mà không cần reload trang
+  setInterval(capNhatGiaBTC, 15000);
+
   // Hàm tính lãi hoặc lỗ với khối lượng USDT và giá mua vào
   function tinhLaiLo() {
     var khoiLuongUSDT = parseFloat(document.getElementById('khoiLuongUSDT').value);
@@ -149,33 +323,57 @@
     var laiLo = giaTriHienTai - khoiLuongUSDT - phiMua - phiBan;
     var tiLe = (laiLo / khoiLuongUSDT) * 100;
 
+    // Mặc định tỷ giá 1 USDT = 25,000 VND (giả định)
+    var tiGiaUSDTtoVND = 25000;  
+
+    // Hiển thị kết quả lãi/lỗ trước, không phụ thuộc tỷ giá
+    hienThiKetQua(laiLo, tiLe, giaHienTai, phiMua, phiBan, laiLo * tiGiaUSDTtoVND, tiGiaUSDTtoVND);
+
+    // Thử cập nhật tỷ giá từ API CoinGecko
     fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=vnd')
       .then(response => response.json())
       .then(data => {
-        var tiGiaUSDTtoVND = data.tether.vnd;
+        tiGiaUSDTtoVND = data.tether.vnd;
         var laiLoVND = laiLo * tiGiaUSDTtoVND;
+
+        // Cập nhật lại tỷ giá nếu lấy được dữ liệu
         hienThiKetQua(laiLo, tiLe, giaHienTai, phiMua, phiBan, laiLoVND, tiGiaUSDTtoVND);
+        document.getElementById('loiTyGia').style.display = 'none'; // Ẩn thông báo lỗi
       })
       .catch(error => {
         console.error('Lỗi khi lấy tỷ giá từ API CoinGecko:', error);
-        alert('Lỗi khi lấy tỷ giá chuyển đổi USDT sang VNĐ');
+        
+        // Hiển thị thông báo lỗi nhưng không ảnh hưởng đến các chức năng khác
+        document.getElementById('loiTyGia').innerText = '😵‍💫 Không thể cập nhật tỷ giá USDT/VND!';
+        document.getElementById('loiTyGia').style.display = 'block';
       });
   }
+
 
   function hienThiKetQua(laiLo, tiLe, giaHienTai, phiMua, phiBan, laiLoVND, tiGiaUSDTtoVND) {
     var ketQua = laiLo >= 0 ? 'Lãi: ' : 'Lỗ: ';
     var ketQuaTien = ketQua + laiLo.toFixed(2) + " USDT";
     var ketQuaTiLe = 'Tỷ lệ: ' + tiLe.toFixed(2) + '%';
-    var ketQuaVND = laiLoVND >= 0 ? 'Lãi trong VND: ' + laiLoVND.toLocaleString('vi-VN') + " VND" :
-                                      'Lỗ trong VND: ' + laiLoVND.toLocaleString('vi-VN') + " VND";
+    var ketQuaVND = laiLoVND >= 0 ? 'Quy đổi: ' + laiLoVND.toLocaleString('vi-VN') + " VND" :
+                                      'Quy đổi: ' + laiLoVND.toLocaleString('vi-VN') + " VND";
 
+    // Hiển thị kết quả tính toán
+    document.getElementById('ketQua').style.display = 'block';
     document.getElementById('ketQua').innerHTML = `
       <div class="result ${laiLo >= 0 ? 'result-lai' : 'result-lo'}">${ketQuaTien}</div>
       <div class="percent">${ketQuaTiLe}</div>
       <div class="vnd">${ketQuaVND}</div>
-      <div class="info">Giá hiện tại BTC/USDT: ${giaHienTai.toFixed(2)} USDT</div>
-      <div class="info">Phí mua: ${phiMua.toFixed(2)} USDT, Phí bán: ${phiBan.toFixed(2)} USDT</div>
-      <div class="info">Tỷ giá 1 USDT = ${tiGiaUSDTtoVND.toLocaleString('vi-VN')} VND</div>
     `;
+    
+    // Hiển thị thông tin giá hiện tại, phí mua/bán, tỷ giá
+    document.getElementById('thongTinGia').style.display = 'block';
+    document.getElementById('giaHienTai').innerHTML = 'Giá hiện tại 1 BTC = ' + giaHienTai.toFixed(2) + ' USDT';
+    document.getElementById('phiMua').innerHTML = 'Phí mua: ' + phiMua.toFixed(2) + ' USDT';
+    document.getElementById('phiBan').innerHTML = 'Phí bán: ' + phiBan.toFixed(2) + ' USDT';
+    document.getElementById('tyGia').innerHTML = 'Tỷ giá 1 USDT = ' + tiGiaUSDTtoVND.toLocaleString('vi-VN') + ' VND';
   }
+    
 </script>
+
+</body>
+</html>
