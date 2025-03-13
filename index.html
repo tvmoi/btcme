@@ -315,38 +315,39 @@
       });
   }
 
+  // Lấy tỷ giá USDT/VND từ LocalStorage, nếu chưa có thì mặc định là 25000
+  var tiGiaUSDTtoVND = localStorage.getItem('tiGiaUSDTtoVND') ? parseFloat(localStorage.getItem('tiGiaUSDTtoVND')) : 25000;
+
   function tinhLaiLoHienThi(giaMuaVao, giaHienTai, khoiLuongUSDT, tiLePhi) {
-    var soBTC = khoiLuongUSDT / giaMuaVao;
-    var giaTriHienTai = soBTC * giaHienTai;
-    var phiMua = khoiLuongUSDT * tiLePhi;
-    var phiBan = giaTriHienTai * tiLePhi;
-    var laiLo = giaTriHienTai - khoiLuongUSDT - phiMua - phiBan;
-    var tiLe = (laiLo / khoiLuongUSDT) * 100;
+      var soBTC = khoiLuongUSDT / giaMuaVao;
+      var giaTriHienTai = soBTC * giaHienTai;
+      var phiMua = khoiLuongUSDT * tiLePhi;
+      var phiBan = giaTriHienTai * tiLePhi;
+      var laiLo = giaTriHienTai - khoiLuongUSDT - phiMua - phiBan;
+      var tiLe = (laiLo / khoiLuongUSDT) * 100;
 
-    // Mặc định tỷ giá 1 USDT = 25,000 VND (giả định)
-    var tiGiaUSDTtoVND = 25000;  
+      // Hiển thị kết quả với tỷ giá hiện tại từ localStorage
+      hienThiKetQua(laiLo, tiLe, giaHienTai, phiMua, phiBan, laiLo * tiGiaUSDTtoVND, tiGiaUSDTtoVND);
 
-    // Hiển thị kết quả lãi/lỗ trước, không phụ thuộc tỷ giá
-    hienThiKetQua(laiLo, tiLe, giaHienTai, phiMua, phiBan, laiLo * tiGiaUSDTtoVND, tiGiaUSDTtoVND);
+      // Thử cập nhật tỷ giá từ API CoinGecko
+      fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=vnd')
+        .then(response => response.json())
+        .then(data => {
+          tiGiaUSDTtoVND = data.tether.vnd; // Cập nhật tỷ giá mới
+          localStorage.setItem('tiGiaUSDTtoVND', tiGiaUSDTtoVND); // Lưu vào LocalStorage
+          var laiLoVND = laiLo * tiGiaUSDTtoVND;
 
-    // Thử cập nhật tỷ giá từ API CoinGecko
-    fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=vnd')
-      .then(response => response.json())
-      .then(data => {
-        tiGiaUSDTtoVND = data.tether.vnd;
-        var laiLoVND = laiLo * tiGiaUSDTtoVND;
-
-        // Cập nhật lại tỷ giá nếu lấy được dữ liệu
-        hienThiKetQua(laiLo, tiLe, giaHienTai, phiMua, phiBan, laiLoVND, tiGiaUSDTtoVND);
-        document.getElementById('loiTyGia').style.display = 'none'; // Ẩn thông báo lỗi
-      })
-      .catch(error => {
-        console.error('Lỗi khi lấy tỷ giá từ API CoinGecko:', error);
-        
-        // Hiển thị thông báo lỗi nhưng không ảnh hưởng đến các chức năng khác
-        document.getElementById('loiTyGia').innerText = '😵‍💫 Không thể cập nhật tỷ giá USDT/VND!';
-        document.getElementById('loiTyGia').style.display = 'block';
-      });
+          // Cập nhật lại tỷ giá nếu lấy được dữ liệu
+          hienThiKetQua(laiLo, tiLe, giaHienTai, phiMua, phiBan, laiLoVND, tiGiaUSDTtoVND);
+          document.getElementById('loiTyGia').style.display = 'none'; // Ẩn thông báo lỗi
+        })
+        .catch(error => {
+          console.error('Lỗi khi lấy tỷ giá từ API CoinGecko:', error);
+          
+          // Hiển thị cảnh báo lỗi nhưng không ảnh hưởng đến chức năng khác
+          document.getElementById('loiTyGia').innerText = '😵‍💫 Không thể cập nhật tỷ giá USDT/VND!';
+          document.getElementById('loiTyGia').style.display = 'block';
+        });
   }
 
 
