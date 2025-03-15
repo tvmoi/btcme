@@ -1,7 +1,7 @@
 {
   "name": "ROI Binance",
   "short_name": "ROI Binance",
-  "start_url": "/",
+  "start_url": "/btcme/",
   "display": "standalone",
   "background_color": "#272727",
   "theme_color": "#000000",
