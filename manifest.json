@@ -3,8 +3,8 @@
   "short_name": "ROI Binance",
   "start_url": "/btcme/",
   "display": "standalone",
-  "background_color": "#272727",
-  "theme_color": "#000000",
+  "background_color": "#333",
+  "theme_color": "#333",
   "icons": [
     {
       "src": "./icon.jpg",
