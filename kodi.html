@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control Kodi</title>
+  <script>
+    // Địa chỉ WebSocket của Kodi
+    const kodiWebSocketUrl = 'ws://192.168.2.44:9090/jsonrpc';
+
+    // Tạo WebSocket kết nối với Kodi
+    const ws = new WebSocket(kodiWebSocketUrl);
+
+    // Mở kết nối WebSocket
+    ws.onopen = function() {
+      console.log("Kết nối tới Kodi thành công!");
+    };
+
+    // Xử lý khi nhận được dữ liệu từ Kodi
+    ws.onmessage = function(event) {
+      console.log("Dữ liệu nhận được từ Kodi:", event.data);
+    };
+
+    // Xử lý lỗi kết nối
+    ws.onerror = function(error) {
+      console.error("Lỗi WebSocket:", error);
+    };
+
+    // Xử lý khi WebSocket đóng kết nối
+    ws.onclose = function() {
+      console.log("Kết nối WebSocket đã đóng.");
+    };
+
+    // Gửi một lệnh JSON-RPC tới Kodi (ví dụ: yêu cầu Kodi phát video)
+    function sendCommandToKodi() {
+      const jsonRpcRequest = {
+        jsonrpc: "2.0",
+        method: "Player.Open",
+        params: {
+          item: {
+            file: "https://download029.fshare.vn/dl/Uh9m41jWradIo5y79s+daVE-uaiM6YDUYTc7H5OHeIVHoo44p61C2NGIGnAON95d4c6LSt+dYwciD5iu/A%20Working%20Man%202025%202160p%20iT%20WEB-DL%20DDP5.1%20Atmos%20DV%20HDR%20H265-ETHEL.mkv"  // Đường dẫn đến file video trên Kodi
+          }
+        },
+        id: 1
+      };
+
+      // Gửi yêu cầu JSON-RPC tới Kodi
+      ws.send(JSON.stringify(jsonRpcRequest));
+      console.log("Lệnh đã gửi tới Kodi:", jsonRpcRequest);
+    }
+
+  </script>
+</head>
+<body>
+  <h1>Control Kodi</h1>
+  <button onclick="sendCommandToKodi()">Play Video on Kodi</button>
+</body>
+</html>
